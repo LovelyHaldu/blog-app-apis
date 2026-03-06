@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
              .orElseThrow(()-> new ResourceNotFoundException("User","id",userId));
    this.userRepo.delete(user);
     }
-
+//basic DTO implementation
     private User dtoToUser(UserDto userDto) {
         User user = new User();
         user.setId(userDto.getId());

@@ -17,7 +17,7 @@ public class User {
 
 private int id;
 
-@Column(name ="user_name",nullable = false,length=100)
+@Column(name ="user_name",nullable = false,length=100)//if i want to change name in db table at column
 private String name;
 
 
