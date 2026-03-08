@@ -3,6 +3,7 @@ package com.blogAppApisByLovely.controller;
 import com.blogAppApisByLovely.payloads.ApiResponse;
 import com.blogAppApisByLovely.payloads.UserDto;
 import com.blogAppApisByLovely.services.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,13 +18,13 @@ public class UserController {
     private UserService userService;
     //POST
     @PostMapping("/")
-    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto) {
        UserDto createUserDto =  this.userService.createUser(userDto);
        return new ResponseEntity<>(createUserDto, HttpStatus.CREATED);
     }
     //PUT--update user
     @PutMapping("/{userId}")
-    public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto,@PathVariable("userId") Integer Uid){
+    public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UserDto userDto,@PathVariable("userId") Integer Uid){
        UserDto updatedUser = this.userService.updateUser(userDto,Uid);
        return ResponseEntity.ok(updatedUser);
     }
