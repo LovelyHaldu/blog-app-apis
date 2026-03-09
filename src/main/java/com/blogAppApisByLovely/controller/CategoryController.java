@@ -3,6 +3,7 @@ package com.blogAppApisByLovely.controller;
 import com.blogAppApisByLovely.payloads.ApiResponse;
 import com.blogAppApisByLovely.payloads.CategoryDto;
 import com.blogAppApisByLovely.services.CategoryService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ public class CategoryController {
     private CategoryService categoryService;
     //create
     @PostMapping("/")
-    public ResponseEntity<CategoryDto> createCategory(@RequestBody CategoryDto categDto ){
+    public ResponseEntity<CategoryDto> createCategory(@Valid @RequestBody CategoryDto categDto ){
         CategoryDto createCategory = this.categoryService.createCategory(categDto);
 //        return new ResponseEntity<>(createCategory, HttpStatus.CREATED);
   return ResponseEntity.status(HttpStatus.CREATED).body(createCategory);//another way of writing
@@ -25,7 +26,7 @@ public class CategoryController {
 
     //update
     @PutMapping("/{catId}")
-    public ResponseEntity<CategoryDto> updateCategory(@RequestBody CategoryDto categDto,@PathVariable("catId") Integer categoryId ){
+    public ResponseEntity<CategoryDto> updateCategory(@Valid @RequestBody CategoryDto categDto,@PathVariable("catId") Integer categoryId ){
         CategoryDto updateCategory = this.categoryService.updateCategory(categDto,categoryId);
         return ResponseEntity.status(HttpStatus.OK).body(updateCategory);
     }
