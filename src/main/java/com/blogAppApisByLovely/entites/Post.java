@@ -19,6 +19,7 @@ public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
+
     @Column(name ="post_title",length = 100,nullable = false)
     private String title;
 
@@ -28,7 +29,6 @@ public class Post {
     private String imageName;
 
     private Date addedDate;
-
 
     @ManyToOne
     @JoinColumn(name = "category_id")
