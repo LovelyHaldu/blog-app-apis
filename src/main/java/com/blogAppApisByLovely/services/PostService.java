@@ -1,5 +1,7 @@
 package com.blogAppApisByLovely.services;
 import com.blogAppApisByLovely.payloads.PostDto;
+import com.blogAppApisByLovely.payloads.PostResponse;
+
 import java.util.List;
 public interface PostService {
     PostDto createPost(PostDto postDto, Integer userId, Integer categoryId);
@@ -8,7 +10,7 @@ public interface PostService {
 
     void deletePost(Integer postId);
 
-    List<PostDto> getAllPosts();
+    PostResponse getAllPosts(Integer pageNumber, Integer pageSize);
 
     PostDto getPostById(Integer postId);
 
