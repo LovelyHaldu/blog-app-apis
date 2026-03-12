@@ -2,6 +2,7 @@ package com.blogAppApisByLovely.controller;
 import com.blogAppApisByLovely.entites.Post;
 import com.blogAppApisByLovely.payloads.ApiResponse;
 import com.blogAppApisByLovely.payloads.PostDto;
+import com.blogAppApisByLovely.payloads.PostResponse;
 import com.blogAppApisByLovely.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -41,9 +42,14 @@ public class PostController {
 
   //get all posts
   @GetMapping("/")
-  public ResponseEntity<List<PostDto>> getAllPosts(){
-    List<PostDto> posts = this.postService.getAllPosts();
-    return new ResponseEntity<>(posts,HttpStatus.OK);
+  public ResponseEntity<PostResponse> getAllPosts(
+          @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
+          @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize
+  ){
+    // Call service which now returns PostResponse instead of List
+    PostResponse postResponse = this.postService.getAllPosts(pageNumber, pageSize);
+    // Return the full response object with metadata
+    return new ResponseEntity<>(postResponse, HttpStatus.OK);
   }
 
   //get post by id

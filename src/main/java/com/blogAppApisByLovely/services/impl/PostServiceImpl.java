@@ -4,14 +4,21 @@ import com.blogAppApisByLovely.entites.Post;
 import com.blogAppApisByLovely.entites.User;
 import com.blogAppApisByLovely.exceptions.ResourceNotFoundException;
 import com.blogAppApisByLovely.payloads.PostDto;
+import com.blogAppApisByLovely.payloads.PostResponse;
 import com.blogAppApisByLovely.repositories.CategoryRepo;
 import com.blogAppApisByLovely.repositories.PostRepo;
 import com.blogAppApisByLovely.repositories.UserRepo;
 import com.blogAppApisByLovely.services.PostService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -77,10 +84,30 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> getAllPosts() {
-        List<Post> allPosts = this.postRepo.findAll();
-         return allPosts.stream().map((post)->this.modelMapper.map(post,PostDto.class)).collect(Collectors.toList());
+    public PostResponse getAllPosts(Integer pageNumber, Integer pageSize) {
 
+        // 1. Create Pageable with Sorting
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("id").descending());
+
+        // 2. Fetch the Page from repository
+        Page<Post> pagePost = this.postRepo.findAll(pageable);
+
+        // 3. Convert Entities to DTOs
+        List<Post> posts = pagePost.getContent();
+        List<PostDto> postDtos = posts.stream()
+                .map(post -> this.modelMapper.map(post, PostDto.class))
+                .collect(Collectors.toList());
+
+        // 4. Build and return the PostResponse
+        PostResponse postResponse = new PostResponse();
+        postResponse.setContent(postDtos);
+        postResponse.setPageNumber(pagePost.getNumber());
+        postResponse.setPageSize(pagePost.getSize());
+        postResponse.setTotalElements((int) pagePost.getTotalElements()); // Cast to int for your payload
+        postResponse.setTotalPages(pagePost.getTotalPages());
+        postResponse.setLastPage(pagePost.isLast()); // Don't forget this!
+
+        return postResponse;
     }
 
     @Override
