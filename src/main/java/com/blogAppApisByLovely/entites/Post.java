@@ -2,7 +2,6 @@ package com.blogAppApisByLovely.entites;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,8 +16,8 @@ import java.util.Date;
 
 public class Post {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer postId;
 
     @Column(name ="post_title",length = 100,nullable = false)
     private String title;
@@ -35,5 +34,6 @@ public class Post {
     private Category category;
 
     @ManyToOne
+    @JoinColumn(name="user_id")
     private User user;
 }

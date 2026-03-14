@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/posts")
+@RequestMapping("/api/posts/")
 public class PostController {
   @Autowired
   private PostService postService;
@@ -44,10 +44,12 @@ public class PostController {
   @GetMapping("/")
   public ResponseEntity<PostResponse> getAllPosts(
           @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
-          @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize
+          @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize,
+          @RequestParam(value ="sortBy",defaultValue = "postId",required = false) String sortBy,
+          @RequestParam(value = "sortDirection",defaultValue ="ASC",required = false) String sortDirection
   ){
     // Call service which now returns PostResponse instead of List
-    PostResponse postResponse = this.postService.getAllPosts(pageNumber, pageSize);
+    PostResponse postResponse = this.postService.getAllPosts(pageNumber, pageSize,sortBy,sortDirection);
     // Return the full response object with metadata
     return new ResponseEntity<>(postResponse, HttpStatus.OK);
   }
