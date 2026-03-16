@@ -20,7 +20,7 @@ import java.io.InputStream;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/posts/")
+@RequestMapping("/api/posts")
 public class PostController {
   @Autowired
   private PostService postService;
@@ -88,7 +88,7 @@ public class PostController {
       return new ResponseEntity<>(updatePost,HttpStatus.OK);
     }
     //search
-  @GetMapping("search/{Keywords}")
+  @GetMapping("/search/{Keywords}")
   public ResponseEntity<List<PostDto>> searchByTitle(
           @PathVariable("Keywords") String Keywords
   ){
@@ -112,7 +112,7 @@ return new ResponseEntity<PostDto>(updatePost,HttpStatus.OK);
   }
 
   //merge to serve files
-    @GetMapping(value = "post/image/{imageName}",produces = MediaType.IMAGE_JPEG_VALUE)
+    @GetMapping(value = "/post/image/{imageName}",produces = MediaType.IMAGE_JPEG_VALUE)
     public void downloadImage(
             @PathVariable("imageName") String imageName,
             HttpServletResponse response
