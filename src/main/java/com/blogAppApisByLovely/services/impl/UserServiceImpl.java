@@ -7,6 +7,7 @@ import com.blogAppApisByLovely.repositories.UserRepo;
 import com.blogAppApisByLovely.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,11 +19,16 @@ public class UserServiceImpl implements UserService {
     private UserRepo userRepo;
 
     @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
     private ModelMapper modelMapper = new ModelMapper();//READ IT ONLINE
     @Override
     public UserDto createUser(UserDto userDto) {
         User user = this.dtoToUser(userDto);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         User savedUser = this.userRepo.save(user);
+
         return this.userToDto(savedUser);
     }
 
@@ -32,7 +38,7 @@ public class UserServiceImpl implements UserService {
                 orElseThrow(()-> new ResourceNotFoundException("User","id",userId));
        user.setName(userDto.getName());
        user.setEmail(userDto.getEmail());
-       user.setPassword(userDto.getPassword());
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
        user.setAbout(userDto.getAbout());
 
        User updatedUser = this.userRepo.save(user);
